@@ -1,0 +1,115 @@
+[build-system]
+requires = ["hatchling"]
+build-backend="hatchling.build"
+
+[project]
+name = "uhdm"
+authors = [{name = "the uhdm authors", email = "dev@dau.dev"}]
+description="Universal Hardware Data Model. A complete modeling of the IEEE SystemVerilog Object Model with VPI Interface, Elaborator, Serialization, Visitor and Listener. Used as a compiled interchange format in between SystemVerilog tools."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+version = "1.84"
+requires-python = ">=3.9"
+keywords = []
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/dau-dev/uhdm-pypi"
+Homepage = "https://github.com/dau-dev/uhdm-pypi"
+
+[project.optional-dependencies]
+develop = [
+    "build",
+    "cibuildwheel",
+    "hatchling",
+    "twine",
+    "wheel",
+]
+
+[tool.cibuildwheel]
+build = "cp39-* cp310-* cp311-* cp312-*"
+test-command = "echo 'TODO'"
+test-requires = []
+
+[tool.cibuildwheel.linux]
+before-all ="""
+set -e
+git submodule update --init --recursive
+pip install orderedmultidict setuptools swig
+cp -f scripts/CMakeLists.txt src/
+cp -f scripts/python/CMakeLists.txt src/python
+cp -f scripts/third_party/capnproto/c++/CMakeLists.txt src/third_party/capnproto/c++/
+cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON
+cmake --build build
+mkdir -p uhdm
+cp build/python/uhdm.py uhdm/__init__.py
+cp build/python/_py_uhdm.so uhdm/
+rm -rf src build .gitmodules
+"""
+repair-wheel-command = "auditwheel -v show {wheel} && LD_LIBRARY_PATH=/project/uhdm/lib auditwheel -v repair -w {dest_dir} {wheel}"
+skip = "*i686 musllinux*"
+
+[tool.cibuildwheel.macos]
+before-all ="""
+set -e
+git submodule update --init --recursive
+pip install orderedmultidict setuptools swig
+cp -f scripts/CMakeLists.txt src/
+cp -f scripts/python/CMakeLists.txt src/python
+cp -f scripts/third_party/capnproto/c++/CMakeLists.txt src/third_party/capnproto/c++/
+cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON
+cmake --build build
+mkdir -p uhdm
+cp build/python/uhdm.py uhdm/__init__.py
+cp build/python/_py_uhdm.so uhdm/
+rm -rf src build
+"""
+environment = {MACOSX_DEPLOYMENT_TARGET=11.0}
+archs = "arm64"
+
+[tool.cibuildwheel.windows]
+before-all ="""
+cp -f scripts/CMakeLists.txt src/
+cp -f scripts/python/CMakeLists.txt src/python
+cp -f scripts/third_party/capnproto/c++/CMakeLists.txt src/third_party/capnproto/c++/
+pip install orderedmultidict setuptools swig
+cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON
+cmake --build build
+mkdir -p uhdm
+cp build/python/uhdm.py uhdm/__init__.py
+cp build/python/_py_uhdm.so uhdm/
+rm -rf src build
+"""
+archs = "AMD64"
+skip = "*win32 *arm_64"	
+
+[tool.hatch.build]
+artifacts = ["uhdm/__init__.py", "uhdm/_py_uhdm.so", "uhdm/_py_uhdm.dll"]
+
+[tool.hatch.build.sources]
+src = "/"
+
+[tool.hatch.build.targets.wheel.hooks.custom]
+
+[tool.hatch.build.targets.wheel]
+packages = ["uhdm"]
+exclude = [
+    "/.github",
+    "/scripts",
+    "/src",
+    "/.gitmodules",
+    "/.gitignore",
+    "/pyproject.toml",
+]

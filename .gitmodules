@@ -1,0 +1,3 @@
+[submodule "UHDM"]
+	path = src
+	url = git@github.com:chipsalliance/UHDM.git
