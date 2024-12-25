@@ -15,11 +15,3 @@ updates:
       - "lang: python"
       - "part: dependencies"
   
-  - package-ecosystem: "cargo"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    labels:
-      - "lang: rust"
-      - "part: dependencies"
-
