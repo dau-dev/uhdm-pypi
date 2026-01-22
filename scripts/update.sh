@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd UHDM
+pushd src
 git fetch --all
 LAST=`git describe --tags --abbrev=0`
 git checkout $LAST
