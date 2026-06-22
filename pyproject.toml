@@ -51,7 +51,7 @@ pip install orderedmultidict setuptools swig
 cp -f scripts/CMakeLists.txt src/
 cp -f scripts/python/CMakeLists.txt src/python
 cp -f scripts/third_party/capnproto/c++/CMakeLists.txt src/third_party/capnproto/c++/
-cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON
+cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 cmake --build build
 mkdir -p uhdm
 cp build/python/uhdm.py uhdm/__init__.py
@@ -69,7 +69,7 @@ pip install orderedmultidict setuptools swig
 cp -f scripts/CMakeLists.txt src/
 cp -f scripts/python/CMakeLists.txt src/python
 cp -f scripts/third_party/capnproto/c++/CMakeLists.txt src/third_party/capnproto/c++/
-cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON
+cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 cmake --build build
 mkdir -p uhdm
 cp build/python/uhdm.py uhdm/__init__.py
@@ -85,7 +85,7 @@ cp -f scripts/CMakeLists.txt src/
 cp -f scripts/python/CMakeLists.txt src/python
 cp -f scripts/third_party/capnproto/c++/CMakeLists.txt src/third_party/capnproto/c++/
 pip install orderedmultidict setuptools swig
-cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON
+cmake -B build src -DUHDM_BUILD_TESTS=OFF -DUHDM_WITH_PYTHON=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 cmake --build build
 mkdir -p uhdm
 cp build/python/uhdm.py uhdm/__init__.py
